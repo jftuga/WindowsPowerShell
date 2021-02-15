@@ -70,7 +70,7 @@ function scoops($pkg) {
   # Search path for Import-Module
 $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 
-# change windows title to: 'user@hostname date/time'  -or-  'user@hostname [DMIN] date/time'
+# change windows title to: 'user@hostname date/time'  -or-  'user@hostname [ADMIN] date/time'
 $host.UI.RawUI.WindowTitle = $(if (Test-Elevated) {"[ADMIN] "} else {""}) + $env:username.ToLower() + "@" + $env:computername.ToLower() + " "  + (get-date -Format g)
 
 # remove undesired aliases
