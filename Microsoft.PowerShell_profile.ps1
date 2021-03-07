@@ -82,3 +82,6 @@ Remove-Item Alias:\wget -force
 # emulate MacOS
 Set-Alias -name pbcopy -value Set-Clipboard
 Set-Alias -name pbpaste -value Get-Clipboard
+
+# other aliases
+Set-Alias -name wm -value "C:\Program Files\WinMerge\WinMergeU.exe"
