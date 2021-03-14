@@ -47,7 +47,7 @@ function rev {
 
 # function: env: similar to using 'bash set' under a cmd prompt
 function env() { 
-    Get-ChildItem env: | % {$_.Name.PadRight(26) + " " + $_.Value }
+    Get-ChildItem env: | ft -HideTableHeaders -Wrap
     Get-Content $PROFILE | select-string -Pattern "^# function:" | `
     format-table @{Label="Functions";Expression={$_.Line}}
 }
