@@ -4,8 +4,8 @@ function of($fname) { $input | Out-File -Encoding ascii $fname }
 # function: rf: Read-File (this is much faster than using Get-Content)
 function rf($fname) { [System.IO.File]::ReadLines($fname) }
 
-# function: gh: GUI for Get-Help
-function gh($topic) { Get-Help $topic | Out-GridView -PassThru | Get-Help -ShowWindow }
+# function: ph: (print help) GUI for Get-Help
+function ph($topic) { Get-Help $topic | Out-GridView -PassThru | Get-Help -ShowWindow }
 
 # function: diron: directory, sort by name
 function diron($dname) {
@@ -67,7 +67,12 @@ function scoops($pkg) {
     Select-Object version; $p[5] + ":" + $p[7] + $v | rg ":.*?json" }
 }
 
-  # Search path for Import-Module
+# function: title: change window title
+function title($t) {
+    $host.UI.RawUI.WindowTitle = $t
+}
+
+# Search path for Import-Module
 $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 
 # change windows title to: 'user@hostname date/time'  -or-  'user@hostname [ADMIN] date/time'
