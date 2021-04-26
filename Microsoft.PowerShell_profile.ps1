@@ -79,6 +79,7 @@ $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerSh
 $host.UI.RawUI.WindowTitle = $(if (Test-Elevated) {"[ADMIN] "} else {""}) + $env:username.ToLower() + "@" + $env:computername.ToLower() + " "  + (get-date -Format g)
 
 # remove undesired aliases
+Remove-Item Alias:\cat -force
 Remove-Item Alias:\curl -force
 Remove-Item Alias:\diff -force
 Remove-Item Alias:\ls -force
