@@ -72,6 +72,11 @@ function title($t) {
     $host.UI.RawUI.WindowTitle = $t
 }
 
+# function: Get-Grps: show all AD groups a user is a member
+function Get-Grps($username_id) {
+    ([ADSISEARCHER]"samaccountname=$username_id").Findone().Properties.memberof -replace '^CN=([^,]+).+$','$1' | Sort-Object | Select-Object @{Name="Group Name";expression={$_}}
+}
+
 # Search path for Import-Module
 $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 
