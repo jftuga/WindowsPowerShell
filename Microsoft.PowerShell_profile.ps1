@@ -8,8 +8,8 @@ function rf($fname) { [System.IO.File]::ReadLines($fname) }
 function ph($topic) { Get-Help $topic | Out-GridView -PassThru | Get-Help -ShowWindow }
 
 # function: diron: directory, sort by name
-function diron($dname) {
-    Get-ChildItem | Sort-Object Name | Select-Object LastWriteTime, Length, Name | `
+function diron($name) {
+    Get-ChildItem $name | Sort-Object Name | Select-Object LastWriteTime, Length, Name | `
     format-table `
         @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
@@ -17,25 +17,28 @@ function diron($dname) {
 }
 
 # function: dirod: directory, sort by date
-function dirod($dname) {
-    Get-ChildItem  | Sort-Object LastWriteTime | Select-Object LastWriteTime, Length, Name | `
+function dirod($name) {
+    Get-ChildItem $name | Sort-Object LastWriteTime | Select-Object LastWriteTime, Length, Name | `
     format-table `
         @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
-
 # function: diros: directory, sort by size
-function diros($dname) {
-    Get-ChildItem -File $dname | Sort-Object Length | Select-Object LastWriteTime, Length, Name | `
+function diros($name) {
+    Get-ChildItem $name | Sort-Object Length | Select-Object LastWriteTime, Length, Name | `
     format-table `
         @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
 # function: dirsb: directory, full name
-function dirsb($dname) { 
-    (Get-ChildItem -Recurse $dname).FullName
+function dirsb($filter, $depth) {
+    $d = $depth
+    if( $null -eq $d ) {
+        $d = 0
+    }
+    (Get-ChildItem -Recurse -depth $d -filter $filter).FullName
 }
 
 # function: rev: reverse the output of a pipeline
