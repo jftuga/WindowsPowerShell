@@ -34,11 +34,17 @@ function diros($name) {
 }
 # function: dirsb: directory, full name
 function dirsb($filter, $depth) {
+    $f = $filter
     $d = $depth
+    if( $null -eq $filter) {
+        $f = ""
+        $d = 1000
+    }
+
     if( $null -eq $d ) {
         $d = 0
     }
-    (Get-ChildItem -Recurse -depth $d -filter $filter).FullName
+    (Get-ChildItem -Recurse -depth $d -filter $f).FullName
 }
 
 # function: rev: reverse the output of a pipeline
