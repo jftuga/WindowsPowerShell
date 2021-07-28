@@ -91,6 +91,55 @@ function Get-Grps($username_id) {
     ([ADSISEARCHER]"samaccountname=$username_id").Findone().Properties.memberof -replace '^CN=([^,]+).+$','$1' | Sort-Object | Select-Object @{Name="Group Name";expression={$_}}
 }
 
+# Source: http://webcache.googleusercontent.com/search?q=cache:Eq41nBrlGzAJ:https://www.powershellbros.com/get-process-remotely-for-user-using-powershell/&hl=en&gl=us&strip=1&vwsrc=0
+# Examples:
+#     Get-UserProcess -Computername ADFS01,ADFS02,ADFS03 -Verbose | Sort-Object ProcessName
+#     Get-UserProcess -Computername (GC "C:\temp\servers.txt") -Verbose | Out-GridView -Title "Procs"
+#     Get-UserProcess -Computername ADFS01,ADFS02,ADFS03 -Username "system" -Verbose | Sort-Object Processname | format-table
+#     Get-UserProcess -Computername ADFS01,ADFS02,ADFS03 -Username "system" -Verbose | Sort-Object Processname | Export-Csv -Path C:\users\$env:username\desktop\results.csv -NoTypeInformation
+# function: Get-UserProess: show processes on remote system
+Function Get-UserProcess {
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory = $true, HelpMessage="Provide server names", ValueFromPipeline = $true)] $Computername,
+        [Parameter(Position=1, Mandatory = $false, HelpMessage="Provide username", ValueFromPipeline = $false)] $UserName = $env:USERNAME
+    )
+    $Array = @()
+    Foreach ($Comp in $Computername) {
+        $Comp = $Comp.Trim()
+        Write-Verbose "Processing $Comp"
+        Try{
+            $Procs = $null
+            $Procs = Invoke-Command $Comp -ErrorAction Stop -ScriptBlock{param($Username) Get-Process -IncludeUserName | Where-Object {$_.username -match $Username}} -ArgumentList $Username
+            If ($Procs) {
+                Foreach ($P in $Procs) {
+                    $Object = $Mem = $CPU = $null
+                    $Mem = [math]::Round($P.ws / 1mb,1)
+                    $CPU = [math]::Round($P.CPU, 1)
+                    $Object = New-Object PSObject -Property ([ordered]@{
+                                "ServerName"             = $Comp
+                                "UserName"               = $P.username
+                                "ProcessName"            = $P.processname
+                                "CPU"                    = $CPU
+                                "Memory(MB)"             = $Mem
+                    })
+                    $Array += $Object
+                }
+            }
+            Else {
+                Write-Verbose "No process found for $Username on $Comp"
+            }
+        }
+        Catch{
+            Write-Verbose "Failed to query $Comp"
+            Continue
+        }
+    }
+    If ($Array) {
+        Return $Array
+    }
+}
+
 # function: Get-Weather: 3-day forecast
 Function Get-Weather{
     (Invoke-WebRequest "http://wttr.in/" -UserAgent "curl").Content
