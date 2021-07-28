@@ -76,6 +76,11 @@ function scoops($pkg) {
     Select-Object version; $p[5] + ":" + $p[7] + $v | rg ":.*?json" }
 }
 
+# function: rg1: ripgrep with a max depth of 1
+function rg1($args) {
+	rg --max-depth 1 $args
+}
+
 # function: title: change window title
 function title($t) {
     $host.UI.RawUI.WindowTitle = $t
@@ -85,6 +90,12 @@ function title($t) {
 function Get-Grps($username_id) {
     ([ADSISEARCHER]"samaccountname=$username_id").Findone().Properties.memberof -replace '^CN=([^,]+).+$','$1' | Sort-Object | Select-Object @{Name="Group Name";expression={$_}}
 }
+
+# function: Get-Weather: 3-day forecast
+Function Get-Weather{
+    (Invoke-WebRequest "http://wttr.in/" -UserAgent "curl").Content
+}
+New-Alias wttr Get-Weather -ErrorAction SilentlyContinue
 
 # Search path for Import-Module
 $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
@@ -105,3 +116,4 @@ Set-Alias -name pbpaste -value Get-Clipboard
 
 # other aliases
 Set-Alias -name wm -value "C:\Program Files\WinMerge\WinMergeU.exe"
+Set-Alias -name tf -value "C:\ProgramData\chocolatey\bin\terraform.exe"
