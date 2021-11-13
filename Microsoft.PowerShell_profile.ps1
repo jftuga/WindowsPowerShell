@@ -44,7 +44,7 @@ function dirsb($filter, $depth) {
     if( $null -eq $d ) {
         $d = 0
     }
-    (Get-ChildItem -Recurse -depth $d -filter $f).FullName
+    (Get-ChildItem -Recurse -depth $d -filter $f).FullName -replace "\\.\\", "\"
 }
 
 # function: rev: reverse the output of a pipeline
@@ -166,3 +166,9 @@ Set-Alias -name pbpaste -value Get-Clipboard
 # other aliases
 Set-Alias -name wm -value "C:\Program Files\WinMerge\WinMergeU.exe"
 Set-Alias -name tf -value "C:\ProgramData\chocolatey\bin\terraform.exe"
+
+# Chocolatey profile
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+  Import-Module "$ChocolateyProfile"
+}
