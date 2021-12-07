@@ -77,8 +77,8 @@ function scoops($pkg) {
 }
 
 # function: rg1: ripgrep with a max depth of 1
-function rg1($args) {
-	rg --max-depth 1 $args
+function rg1($pattern) {
+	rg --max-depth 1 $pattern
 }
 
 # function: title: change window title
