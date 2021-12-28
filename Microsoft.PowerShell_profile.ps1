@@ -32,6 +32,14 @@ function diros($name) {
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
+# function: diroe: directory, sort by extension
+function diroe($name) {
+    Get-ChildItem $name | Sort-Object Extension,Name | Select-Object LastWriteTime, Length, Name | `
+    format-table `
+        @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
+        @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
+        Name `
+}
 # function: dirsb: directory, full name
 function dirsb($filter, $depth) {
     $f = $filter
