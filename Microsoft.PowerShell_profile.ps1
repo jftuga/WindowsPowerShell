@@ -1,3 +1,11 @@
+# remove undesired aliases
+Remove-Item Alias:\cat -force
+Remove-Item Alias:\curl -force
+Remove-Item Alias:\diff -force
+Remove-Item Alias:\ls -force
+Remove-Item Alias:\sv -force
+Remove-Item Alias:\wget -force
+
 # function: of: Out-File - save file in ASCII format
 function of($fname) { $input | Out-File -Encoding ascii $fname }
 
@@ -154,18 +162,25 @@ Function Get-Weather{
 }
 New-Alias wttr Get-Weather -ErrorAction SilentlyContinue
 
+# function sv: activate a python virtual environment
+Function sv {
+    .\venv\Scripts\activate
+}
+
+# function pmvv: create python virtual environment
+Function pmvv {
+    python -m venv venv
+    sv
+    python -m pip install --upgrade pip
+    pip install wheel boto3 flake8 black
+    pip3 list
+}
+
 # Search path for Import-Module
 $env:PSModulePath = "$env:PSModulePath;$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 
 # change windows title to: 'user@hostname date/time'  -or-  'user@hostname [ADMIN] date/time'
 $host.UI.RawUI.WindowTitle = $(if (Test-Elevated) {"[ADMIN] "} else {""}) + $env:username.ToLower() + "@" + $env:computername.ToLower() + " "  + (get-date -Format g)
-
-# remove undesired aliases
-Remove-Item Alias:\cat -force
-Remove-Item Alias:\curl -force
-Remove-Item Alias:\diff -force
-Remove-Item Alias:\ls -force
-Remove-Item Alias:\wget -force
 
 # emulate MacOS
 Set-Alias -name pbcopy -value Set-Clipboard
