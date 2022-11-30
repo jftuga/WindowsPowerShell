@@ -26,20 +26,22 @@ function diron($name) {
 
 # function: dirod: directory, sort by date
 function dirod($name) {
-    Get-ChildItem $name | Sort-Object LastWriteTime | Select-Object LastWriteTime, Length, Name | `
+    Get-ChildItem $name | Sort-Object LastWriteTime, Name | Select-Object LastWriteTime, Length, Name | `
     format-table `
         @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
+
 # function: diros: directory, sort by size
 function diros($name) {
-    Get-ChildItem $name | Sort-Object Length | Select-Object LastWriteTime, Length, Name | `
+    Get-ChildItem $name | Sort-Object Length, Name | Select-Object LastWriteTime, Length, Name | `
     format-table `
         @{Label="Time";Expression={$_.LastWriteTime.ToString("yyyy-MM-dd HH:MM")}},
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
+
 # function: diroe: directory, sort by extension
 function diroe($name) {
     Get-ChildItem $name | Sort-Object Extension,Name | Select-Object LastWriteTime, Length, Name | `
@@ -48,6 +50,7 @@ function diroe($name) {
         @{Label="Length";Expression={('{0:N0}' -f $_.Length).PadLeft(13)}},
         Name `
 }
+
 # function: dirsb: directory, full name
 function dirsb($filter, $depth) {
     $f = $filter
@@ -113,6 +116,7 @@ function Get-Grps($username_id) {
 #     Get-UserProcess -Computername (GC "C:\temp\servers.txt") -Verbose | Out-GridView -Title "Procs"
 #     Get-UserProcess -Computername ADFS01,ADFS02,ADFS03 -Username "system" -Verbose | Sort-Object Processname | format-table
 #     Get-UserProcess -Computername ADFS01,ADFS02,ADFS03 -Username "system" -Verbose | Sort-Object Processname | Export-Csv -Path C:\users\$env:username\desktop\results.csv -NoTypeInformation
+
 # function: Get-UserProess: show processes on remote system
 Function Get-UserProcess {
     [CmdletBinding()]
