@@ -191,8 +191,10 @@ Set-Alias -name pbcopy -value Set-Clipboard
 Set-Alias -name pbpaste -value Get-Clipboard
 
 # other aliases
+Set-Alias -name goland -value "C:\Program Files (x86)\JetBrains\GoLand 2023.2\bin\goland64.exe"
 Set-Alias -name wm -value "C:\Program Files\WinMerge\WinMergeU.exe"
 Set-Alias -name tf -value "C:\ProgramData\chocolatey\bin\terraform.exe"
+Set-Alias -name zen -value "C:\Users\$env:USERNAME\venv_zen_3.11\Scripts\Activate.ps1"
 
 # Chocolatey profile
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
